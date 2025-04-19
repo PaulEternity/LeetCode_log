@@ -21,26 +21,24 @@ public class Leet102 {
     }
     class Solution {
         public List<List<Integer>> levelOrder(TreeNode root) {
-            if (root == null) {return List.of();}
-            List<List<Integer>> res = new LinkedList<>();
-            Queue<TreeNode> queue = new ArrayDeque<>();
-            queue.add(root);
-            while(!queue.isEmpty()){
-                int n = queue.size();
-                List<Integer> list = new ArrayList<>(n);
-                while(n-- > 0){
-                    TreeNode node = queue.poll();
-                    list.add(node.val);
-                    if(node.left != null){
-                        queue.add(node.left);
-                    }
-                    if(node.right != null){
-                        queue.add(node.right);
-                    }
-                }
-                res.add(list);
+            List<List<Integer>> res = new ArrayList<>();
+            if (root == null) {
+                return new ArrayList<List<Integer>>();
             }
+            dfs(1, root, res);
             return res;
+        }
+        private void dfs(int index,TreeNode root, List<List<Integer>> res) {
+            if(index > res.size()) {
+                res.add(new ArrayList<Integer>());
+            }
+            res.get(index-1).add(root.val);
+            if(root.left != null) {
+                dfs(index+1, root.left, res);
+            }
+            if(root.right != null) {
+                dfs(index+1, root.right, res);
+            }
 
         }
 

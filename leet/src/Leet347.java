@@ -3,37 +3,32 @@ import java.util.*;
 public class Leet347 {
     class Solution {
         public int[] topKFrequent(int[] nums, int k) {
-            HashMap<Integer, Integer> map = new HashMap<>();
+            List<Integer> result = new ArrayList<>();
+            Map<Integer,Integer> map = new HashMap<>();
             for(int num : nums){
-                if (map.containsKey(num)) {
-                    map.put(num, map.get(num) + 1);
-                } else {
-                    map.put(num, 1);
+                if(map.containsKey(num)){
+                    map.put(num,map.get(num)+1);
+                }else{
+                    map.put(num,1);
                 }
             }
-            PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer o1, Integer o2) {
-                    return map.get(o1) - map.get(o2);
+            List<Integer>[] list = new List[nums.length+1];
+            for(int key : map.keySet()){
+                int i = map.get(key);
+                if(list[i] == null){
+                    list[i] = new ArrayList<>();
                 }
-            });
-            for (Integer key : map.keySet()) {
-                if (pq.size() < k) {
-                    pq.add(key);
-                } else if (map.get(key) > map.get(pq.peek())) {
-                    pq.remove();
-                    pq.add(key);
-                }
+                list[i].add(key);
             }
-            List<Integer> ans = new ArrayList<>();
-            while (!pq.isEmpty()) {
-                ans.add(pq.remove());
+            for(int i=list.length-1;i >= 0 && result.size() < k;i--){
+                if(list[i] == null)continue;
+                result.addAll(list[i]);
             }
-            int[] res = new int[ans.size()];
-            for (int i = 0; i < res.length; i++) {
-                res[i] = ans.get(i);
+            int[] ans = new int[result.size()];
+            for (int i = 0; i < ans.length; i++) {
+                ans[i] = result.get(i);
             }
-            return res;
+            return ans;
         }
     }
 }
